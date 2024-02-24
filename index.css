@@ -2,16 +2,30 @@ body {
     margin: 0;
 }
 
-html{
-height: 100%;
+html {
+    height: 100%;
 }
 
 .container {
     display: grid;
-    grid-template-columns: 0.4fr auto;
-    grid-template-rows: auto;
-    grid-template-areas: 'aside main';
+    grid-template-columns: 0.5fr auto;
+    grid-template-rows: auto 1fr;
+    grid-template-areas:
+        'header header'
+        'aside main';
     height: 100vh;
+}
+
+header {
+    grid-area: header;
+    max-height: 4rem;
+    display: flex;
+    align-items: center;
+    background-color: slategrey;
+}
+
+header h1{
+    margin-left: 2rem;
 }
 
 aside {
@@ -20,20 +34,22 @@ aside {
     padding: 1rem;
     font-size: 2em;
     background-color: ivory;
+    grid-area: aside;
 }
 
-main{
+main {
     display: flex;
     flex-direction: column;
     background-color: aliceblue;
     padding: 1rem;
+    grid-area: main;
 }
 
 hr {
     width: 100%;
 }
 
-.add-projects{
+.add-projects {
     text-align: center;
 }
 
@@ -41,25 +57,26 @@ hr {
     font-size: 1em;
 }
 
-.project-name{
+.project-name {
     display: flex;
     justify-content: space-evenly;
     align-items: center;
 }
 
-.add-projects-btn{
+.add-projects-btn {
     border-radius: 0.5rem;
     cursor: pointer;
     background-color: aliceblue;
 }
 
-.add-projects-btn:hover, .edit-todo:hover{
+.add-projects-btn:hover,
+.edit-todo:hover {
     transition: 1s ease-out;
     transform: translateY(-5px);
     box-shadow: 0px 0px 20px 3px #0f6bf5;
 }
 
-.delete-project-btn{
+.delete-project-btn {
     height: 40px;
     width: 60px;
     border-radius: 0.5em;
@@ -68,30 +85,31 @@ hr {
     cursor: pointer;
 }
 
-.delete-project-btn:hover, .delete-todo:hover{
+.delete-project-btn:hover,
+.delete-todo:hover {
     transition: 1s ease-out;
     transform: translateY(-5px);
     box-shadow: 0px 0px 20px 3px #F44336;
 }
 
-.add-todos{
+.add-todos {
     text-align: center;
-    margin-bottom: 0.5rem;
 }
 
-.add-todos-btn{
+.add-todos-btn {
     font-size: 2em;
     background-color: ivory;
 }
 
-.todo-name{
+.todo-name {
     display: flex;
     font-size: 2em;
     justify-content: center;
     align-items: center;
 }
 
-.delete-todo, .edit-todo{
+.delete-todo,
+.edit-todo {
     margin-left: 10px;
     height: 40px;
     width: 60px;
