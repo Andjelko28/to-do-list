@@ -16,7 +16,16 @@
         </header>
         <aside>
             <div class="add-projects">
-                <button class="add-projects-btn">Add project</button>
+                <button class="show-input-btn">Add project</button>
+            </div>
+            <div  class="add-project-form">
+                <form id="project-form">
+                    <input type="text" class="project-form-input">
+                    <div class="form-btns">
+                        <button type="button" class="add-project-btn">Add</button>
+                        <button type="button" class="cancel-project-btn">Cancel</button>
+                    </div>
+                </form>
             </div>
             <div class="projects-container">
                 <div class="project-name">
@@ -27,11 +36,22 @@
         </aside>
         <main>
             <div class="add-todos">
-                <button class="add-todos-btn add-projects-btn">Add to do</button>
+                <button class="add-todos-btn show-input-btn">Add to do</button>
+            </div>
+            <div class="add-todo-form">
+                <form id="todo-form">
+                    <input type="text" class="todos-form-input">
+                    <div class="form-btns">
+                        <button type="button" class="add-todo-btn">Add</button>
+                        <button type="button" class="cancel-todo-btn">Cancel</button>
+                    </div>
+                </form>
             </div>
             <div class="todos-container">
                 <article class="todo-name">
+                    <input type="checkbox">
                     <p>Need to go to the gym at 1 o'clock</p>
+                    <input type="date">
                     <button class="edit-todo">Edit</button>
                     <button class="delete-todo">Delete</button>
                 </article>
