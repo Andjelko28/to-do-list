@@ -57,6 +57,12 @@ hr {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    margin-top: 10px;
+}
+
+.project-name:hover{
+    border: 1px solid black;
+    background-color: #0f6bf51e;
 }
 
 .show-input-btn {
@@ -169,3 +175,9 @@ input[type='date'] {
     font-size: 1.6em;
     margin-top: 4px;
 }
+
+a {
+    text-decoration: none;
+    color: black;
+}
+
