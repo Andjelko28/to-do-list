@@ -176,8 +176,12 @@ input[type='date'] {
     margin-top: 4px;
 }
 
-a {
-    text-decoration: none;
-    color: black;
+ul{
+    list-style-type: none;
 }
 
+li{
+    display:flex;
+    flex-direction: row;
+    align-items: center;
+}

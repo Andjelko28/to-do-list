@@ -46,9 +46,14 @@ class ProjectManager {
     addProject(project) {
         this.projects.push(project);
     }
-    deleteProject(projectName) {
-        const projectToDelete = this.projects.find((project) => project.getName() === projectName)
-        this.projects.splice(this.projects.indexOf(projectToDelete), 1);
+    deleteProject(nameElement) {
+        const projectName = nameElement.textContent;
+        const index = projectManager.projects.findIndex((proj) => proj.newProject.getName() === projectName);
+
+        if (index !== -1) {
+            return projectManager.projects.splice(index, 1);
+        }
+        nameElement.parentElement.remove();
     }
 }
 
@@ -92,6 +97,16 @@ class ToDo {
     setEdited(edited) {
         this.edited = edited;
     }
+    getDesription() {
+        return this.description;
+    }
+    getCompleted() {
+        return this.completed;
+    }
+
+    getEdited() {
+        return this.edited;
+    }
 
 }
 
@@ -106,10 +121,12 @@ function projectCreator() {
 
         const html = `
         <div class="projects-container">
-                <div class="project-name">
-                    <a href="#">${newProject.name}</a>
+                <ul class="project-name">
+                    <li>
+                    <p>${newProj.name}</p>
                     <button class="delete-project-btn">Delete</button>
-                </div>
+                    </li>
+                    </div>
             </div>
         `;
 
@@ -145,9 +162,13 @@ addProjectBtn.addEventListener('click', () => {
 })
 
 // Delete project
-// deleteProject.addEventListener('click', (e) => {
-//    const project =  e.target.closest('.project-name')
-//     projectManager.deleteProject(project);
+// projectsContainer.addEventListener('click', (e) => {
+//     if (e.target.classList.contains('.delete-project-btn')) {
+//         const project = e.target.closest('.project-name');
+//         const projectName = project.querySelector('a').textContent;
+//         projectManager.deleteProject(projectName);
+//         project.remove();
+//     }
 // })
 
 const projectManager = new ProjectManager();
