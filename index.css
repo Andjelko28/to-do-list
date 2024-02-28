@@ -111,7 +111,7 @@ hr {
 .todo-name {
     display: flex;
     font-size: 2em;
-    justify-content: center;
+    justify-content: flex-start;
     align-items: center;
 }
 
@@ -184,4 +184,9 @@ li{
     display:flex;
     flex-direction: row;
     align-items: center;
+    cursor: pointer;
+}
+
+.date{
+    margin-left: 10px;
 }
