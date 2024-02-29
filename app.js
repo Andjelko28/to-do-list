@@ -28,6 +28,8 @@ const toDosContainer = document.querySelector('.todos-container');
 // Delete button for project
 const deleteProject = document.querySelector('.delete-project-btn');
 
+// Select ul
+const ul = document.querySelector('.project-name');
 
 function showAddForm(el) {
     el.style.visibility = 'visible';
@@ -61,6 +63,13 @@ class ProjectManager {
         }
 
         nameElement.remove(); // Remove whole element
+    }
+    findProject(nameElement) {
+        const element = nameElement.querySelector('li p');
+        const projName = element.textContent;
+        const index = this.projects.findIndex(p => p.getName() === projName);
+        console.log(index);
+        return this.projects[index];
     }
 }
 
@@ -112,7 +121,7 @@ class ToDo {
         this.edited = edited;
     }
     generateID() {
-        return this.currentID++;
+        return this.currentID = + this.currentID;
     }
     completeToggle() {
         this.completed = !this.completed;
@@ -128,19 +137,14 @@ function projectCreator() {
         projectManager.addProject(newProj);
 
         const html = `
-        <div class="projects-container">
-                <ul class="project-name">
-                    <li>
                     <p class='proj-name'>${newProj.name}</p>
                     <button class="delete-project-btn">Delete</button>
-                    </li>
-                    </div>
-            </div>
         `;
 
-        const div = document.createElement('div');
-        div.innerHTML = html;
-        projectsContainer.appendChild(div);
+        const li = document.createElement('li');
+        li.classList.add("list-group-item");
+        li.innerHTML = html;
+        ul.appendChild(li);
         projectForm.reset()
     }
 
@@ -170,7 +174,7 @@ function todosCreator() {
         `
         const div = document.createElement('div');
         div.innerHTML = html;
-        toDosContainer.appendChild(div)
+        toDosContainer.appendChild(div);
         toDoForm.reset();
     }
 
@@ -190,7 +194,6 @@ cancelToDoBtn.addEventListener('click', () => hideAddForm(todoFormDiv));
 
 // Add project and todo
 addProjectBtn.addEventListener('click', () => {
-    console.log(projectManager.getProjects());
     creator.displayProject();
 })
 
@@ -199,13 +202,18 @@ toDobtn.addEventListener('click', () => {
 })
 
 // Delete project
-projectsContainer.addEventListener('click', (e) => {
+ul.addEventListener('click', (e) => {
     const target = e.target;
     if (target.classList.contains("delete-project-btn")) {  // If container have class of delete btn  
-        const nameElement = target.closest('.projects-container'); // Select  closest parent with class "projects-container"
+        const nameElement = target.closest('.list-group-item'); // Select  closest parent with class "projects-container"
         projectManager.deleteProject(nameElement); // Than  remove the project from manager and DOM
+    } else {
+        const nameElement = target.closest('.list-group-item')
+        projectManager.findProject(nameElement)
     }
 })
+
+
 
 const projectManager = new ProjectManager();
 const newProject = new Project();
