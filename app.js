@@ -40,9 +40,10 @@ function hideAddForm(el) {
 }
 class ProjectManager {
     projects;
-    id;
+    currentProject;
     constructor() {
         this.projects = [];
+        this.currentProject = null;
     }
     setProjects(projects) {
         this.projects = projects;
@@ -52,6 +53,12 @@ class ProjectManager {
     }
     addProject(project) {
         this.projects.push(project);
+    }
+    setCurrentProject(project) {
+        this.currentProject = project;
+    }
+    getCurrentProject() {
+        return this.currentProject;
     }
     deleteProject(nameElement) {
         const element = nameElement.querySelector('li p'); // First select element
@@ -68,14 +75,16 @@ class ProjectManager {
         const element = nameElement.querySelector('li p');
         const projName = element.textContent;
         const index = this.projects.findIndex(p => p.getName() === projName);
-        console.log(index);
-        return this.projects[index];
+        if (index !== -1) {
+            this.currentProject = this.projects[index];
+            this.currentProject.todos.push({ description: 'Descriptin', completed: false });
+            console.log(this.projects);
+        }
+        return this.currentProject;
     }
 }
 
 class Project {
-    name;
-    todos;
     constructor(name) {
         this.name = name;
         this.todos = [];
@@ -132,9 +141,14 @@ class ToDo {
 
 function projectCreator() {
     const displayProject = () => {
+
         let name = projectNameInput.value;
+
         const newProj = new Project(name);
+
+
         projectManager.addProject(newProj);
+
 
         const html = `
                     <p class='proj-name'>${newProj.name}</p>
@@ -154,23 +168,18 @@ function projectCreator() {
 
 function todosCreator() {
     const displayToDo = () => {
+
         let description = toDoInput.value;
         let dueDate = dueDateInput.value;
 
-        const newTodo = new ToDo(description, dueDate);
-        newProject.addTodo(newTodo);
-        console.log(newTodo);
-
         const html = `
-        <div>
                 <article class="todo-name">
                     <input type="checkbox">
-                    <p class="description">${newTodo.description}</p>
-                    <p class="date">Date: ${newTodo.dueDate}</p>
+                    <p class="description">${description}</p>
+                    <p class="date">Date: ${dueDate}</p>
                     <button class="edit-todo">Edit</button>
                     <button class="delete-todo">Delete</button>
                 </article>
-                </div>
         `
         const div = document.createElement('div');
         div.innerHTML = html;
@@ -209,7 +218,10 @@ ul.addEventListener('click', (e) => {
         projectManager.deleteProject(nameElement); // Than  remove the project from manager and DOM
     } else {
         const nameElement = target.closest('.list-group-item')
-        projectManager.findProject(nameElement)
+
+        projectManager.findProject(nameElement);
+
+        projectManager.setCurrentProject(nameElement);
     }
 })
 
