@@ -72,15 +72,17 @@ class ProjectManager {
         nameElement.remove(); // Remove whole element
     }
     findProject(nameElement) {
+
         const element = nameElement.querySelector('li p');
         const projName = element.textContent;
         const index = this.projects.findIndex(p => p.getName() === projName);
         if (index !== -1) {
             this.currentProject = this.projects[index];
-            this.currentProject.todos.push({ description: 'Descriptin', completed: false });
-            console.log(this.projects);
         }
-        return this.currentProject;
+        console.log(this.currentProject);
+    }
+    addTodo(todo) {
+        this.currentProject.todos.push(todo);
     }
 }
 
@@ -95,9 +97,7 @@ class Project {
     getName() {
         return this.name;
     }
-    addTodo(todo) {
-        this.todos.push(todo);
-    }
+
     deleteToDo() {
 
     }
@@ -162,15 +162,28 @@ function projectCreator() {
         projectForm.reset()
     }
 
+
     return { displayProject }
 }
 
 
 function todosCreator() {
+
     const displayToDo = () => {
 
         let description = toDoInput.value;
         let dueDate = dueDateInput.value;
+
+        if (!projectManager.getCurrentProject()) {
+            alert("Please select a project first!");
+            return;
+        }
+
+        // Create a new todo
+        const newTodo = new ToDo(description, dueDate);
+
+        // Add the todo to the currently selected project
+        projectManager.addTodo(newTodo);
 
         const html = `
                 <article class="todo-name">
@@ -186,7 +199,6 @@ function todosCreator() {
         toDosContainer.appendChild(div);
         toDoForm.reset();
     }
-
     return { displayToDo }
 
 }
@@ -220,8 +232,6 @@ ul.addEventListener('click', (e) => {
         const nameElement = target.closest('.list-group-item')
 
         projectManager.findProject(nameElement);
-
-        projectManager.setCurrentProject(nameElement);
     }
 })
 
