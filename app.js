@@ -80,6 +80,7 @@ class ProjectManager {
             this.currentProject = this.projects[index];
         }
         console.log(this.currentProject);
+        return this.currentProject.todos;
     }
     addTodo(todo) {
         this.currentProject.todos.push(todo);
@@ -113,7 +114,6 @@ class ToDo {
     constructor(description, dueDate) {
         this.description = description;
         this.dueDate = dueDate;
-        this.currentID = 1;
         this.completed = false;
         this.edited = false;
     }
@@ -169,7 +169,7 @@ function projectCreator() {
 
 function todosCreator() {
 
-    const displayToDo = () => {
+    const createToDo = () => {
 
         let description = toDoInput.value;
         let dueDate = dueDateInput.value;
@@ -185,23 +185,51 @@ function todosCreator() {
         // Add the todo to the currently selected project
         projectManager.addTodo(newTodo);
 
-        const html = `
-                <article class="todo-name">
-                    <input type="checkbox">
-                    <p class="description">${description}</p>
-                    <p class="date">Date: ${dueDate}</p>
-                    <button class="edit-todo">Edit</button>
-                    <button class="delete-todo">Delete</button>
-                </article>
-        `
-        const div = document.createElement('div');
-        div.innerHTML = html;
-        toDosContainer.appendChild(div);
-        toDoForm.reset();
+        // const html = `
+        //         <article class="todo-name">
+        //             <input type="checkbox">
+        //             <p class="description">${description}</p>
+        //             <p class="date">Date: ${dueDate}</p>
+        //             <button class="edit-todo">Edit</button>
+        //             <button class="delete-todo">Delete</button>
+        //         </article>
+        // `
+        // const div = document.createElement('div');
+        // div.innerHTML = html;
+        // toDosContainer.appendChild(div);
+        // toDoForm.reset();
     }
-    return { displayToDo }
+
+    const displayToDo = () => {
+
+        const todos = projectManager.currentProject.todos;
+
+
+        todos.map((todo) => {
+            const html = `
+            <article class="todo-name">
+                <input type="checkbox">
+                <p class="description">${todo.description}</p>
+                <p class="date">Date: ${todo.dueDate}</p>
+                <button class="edit-todo">Edit</button>
+                <button class="delete-todo">Delete</button>
+            </article>
+    `
+            const div = document.createElement('div');
+            div.innerHTML = html;
+            toDosContainer.appendChild(div);
+            toDoForm.reset();
+        })
+
+    }
+
+    return { createToDo, displayToDo }
 
 }
+
+
+
+
 
 const creator = projectCreator();
 const toDoCreator = todosCreator();
@@ -219,6 +247,7 @@ addProjectBtn.addEventListener('click', () => {
 })
 
 toDobtn.addEventListener('click', () => {
+    toDoCreator.createToDo();
     toDoCreator.displayToDo();
 })
 
@@ -232,6 +261,10 @@ ul.addEventListener('click', (e) => {
         const nameElement = target.closest('.list-group-item')
 
         projectManager.findProject(nameElement);
+
+        toDosContainer.innerHTML = '';
+
+        toDoCreator.displayToDo();
     }
 })
 
