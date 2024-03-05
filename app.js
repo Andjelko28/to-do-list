@@ -98,22 +98,30 @@ class Project {
     getName() {
         return this.name;
     }
-
-    deleteToDo() {
-
+    deleteToDo(todoElement) {
+        const todo = projectManager.currentProject.todos.find(t => t.id === todoElement.dataset.id);
+        if (todo) {
+            const index = projectManager.currentProject.todos.indexOf(todo);
+            if (index !== -1) {
+                projectManager.currentProject.todos.splice(index, 1);
+                todoElement.remove();
+            }
+        }
     }
 }
+
 
 
 class ToDo {
     description;
     dueDate;
-    currentID;
+    id;
     completed;
     edited;
     constructor(description, dueDate) {
         this.description = description;
         this.dueDate = dueDate;
+        this.id = self.crypto.randomUUID();
         this.completed = false;
         this.edited = false;
     }
@@ -130,13 +138,12 @@ class ToDo {
         this.edited = edited;
     }
     generateID() {
-        return this.currentID = + this.currentID;
+        return this.currentID++;
     }
     completeToggle() {
         this.completed = !this.completed;
     }
 }
-
 
 
 function projectCreator() {
@@ -181,7 +188,6 @@ function todosCreator() {
 
         // Create a new todo
         const newTodo = new ToDo(description, dueDate);
-
         // Add the todo to the currently selected project
         projectManager.addTodo(newTodo);
 
@@ -203,9 +209,11 @@ function todosCreator() {
     const displayToDo = () => {
 
         const todos = projectManager.currentProject.todos;
+        console.log(todos);
 
 
-        todos.map((todo) => {
+
+        todos.forEach((todo) => {
             const html = `
             <article class="todo-name">
                 <input type="checkbox">
@@ -215,6 +223,7 @@ function todosCreator() {
                 <button class="delete-todo">Delete</button>
             </article>
     `
+
             const div = document.createElement('div');
             div.innerHTML = html;
             toDosContainer.appendChild(div);
@@ -248,7 +257,7 @@ addProjectBtn.addEventListener('click', () => {
 
 toDobtn.addEventListener('click', () => {
     toDoCreator.createToDo();
-    toDoCreator.displayToDo();
+    toDoForm.reset();
 })
 
 // Delete project
@@ -256,7 +265,8 @@ ul.addEventListener('click', (e) => {
     const target = e.target;
     if (target.classList.contains("delete-project-btn")) {  // If container have class of delete btn  
         const nameElement = target.closest('.list-group-item'); // Select  closest parent with class "projects-container"
-        projectManager.deleteProject(nameElement); // Than  remove the project from manager and DOM
+        projectManager.deleteProject(nameElement);
+        toDosContainer.innerHTML = ''; // Than  remove the project from manager and DOM
     } else {
         const nameElement = target.closest('.list-group-item')
 
@@ -268,7 +278,17 @@ ul.addEventListener('click', (e) => {
     }
 })
 
+const deleteToDoButtons = document.querySelectorAll('.delete-todo');
+
+// Add event listener to each delete button
+deleteToDoButtons.forEach((button) => {
+    button.addEventListener('click', () => {
+      const todoElement = button.closest('.to-do');
+      deleteToDo(todoElement);
+    });
+  });
 
 
 const projectManager = new ProjectManager();
 const newProject = new Project();
+const newTodo = new ToDo();
