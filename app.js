@@ -27,9 +27,12 @@ const toDosContainer = document.querySelector('.todos-container');
 
 // Delete button for project
 const deleteProject = document.querySelector('.delete-project-btn');
+const deleteTodo = document.querySelector('.delete-todo');
 
-// Select ul
+// Select ul and article
 const ul = document.querySelector('.project-name');
+const art = document.querySelector('.todo-name');
+
 
 function showAddForm(el) {
     el.style.visibility = 'visible';
@@ -98,17 +101,18 @@ class Project {
     getName() {
         return this.name;
     }
-    deleteToDo(todoElement) {
-        const todo = projectManager.currentProject.todos.find(t => t.id === todoElement.dataset.id);
-        if (todo) {
-            const index = projectManager.currentProject.todos.indexOf(todo);
-            if (index !== -1) {
-                projectManager.currentProject.todos.splice(index, 1);
-                todoElement.remove();
-            }
+    deleteTodoById(todoId) {
+        // Find todo, or index of that todo
+        const index = projectManager.currentProject.todos.findIndex(todo => todo.id === todoId);
+        if (index !== -1) {
+            projectManager.currentProject.todos.splice(index, 1); // Then if is not -1 delete it
+            console.log("Todo deleted");
+        } else {
+            console.log("Todo not found");
         }
     }
 }
+
 
 
 
@@ -237,9 +241,6 @@ function todosCreator() {
 }
 
 
-
-
-
 const creator = projectCreator();
 const toDoCreator = todosCreator();
 
@@ -278,16 +279,14 @@ ul.addEventListener('click', (e) => {
     }
 })
 
-const deleteToDoButtons = document.querySelectorAll('.delete-todo');
-
-// Add event listener to each delete button
-deleteToDoButtons.forEach((button) => {
-    button.addEventListener('click', () => {
-      const todoElement = button.closest('.to-do');
-      deleteToDo(todoElement);
-    });
-  });
-
+toDosContainer.addEventListener('click', (e) => {
+    const target = e.target;
+    if (target.classList.contains("delete-todo")) { // Check if it is clicked on this btn
+        const todoElement = target.closest('.todo-name'); // Then find closest  parent with that class
+        newProject.deleteTodoById(todoElement); // Then call function for deleting that element
+        todoElement.remove(); // Clear HTML el from DOM
+    }
+});
 
 const projectManager = new ProjectManager();
 const newProject = new Project();
