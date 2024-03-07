@@ -60,7 +60,7 @@ hr {
     margin-top: 10px;
 }
 
-li:hover{
+li:hover {
     border: 1px solid black;
     background-color: #0f6bf51e;
 }
@@ -176,17 +176,30 @@ input[type='date'] {
     margin-top: 4px;
 }
 
-ul{
+ul {
     list-style-type: none;
 }
 
-li{
-    display:flex;
+li {
+    display: flex;
     flex-direction: row;
     align-items: center;
     cursor: pointer;
 }
 
-.date{
+.date {
     margin-left: 10px;
+}
+
+.edit-container {
+    position: fixed;
+    display: none;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    cursor: pointer;
 }

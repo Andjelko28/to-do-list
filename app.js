@@ -24,6 +24,7 @@ const dueDateInput = document.querySelector('.due-date');
 //
 const projectsContainer = document.querySelector('.projects-container');
 const toDosContainer = document.querySelector('.todos-container');
+const editContainer = document.querySelector('.edit-container');
 
 // Delete button for project
 const deleteProject = document.querySelector('.delete-project-btn');
@@ -33,6 +34,8 @@ const deleteTodo = document.querySelector('.delete-todo');
 const ul = document.querySelector('.project-name');
 const art = document.querySelector('.todo-name');
 
+// Edit btn
+const editBtn = document.querySelector('.edit-btn');
 
 function showAddForm(el) {
     el.style.visibility = 'visible';
@@ -121,7 +124,6 @@ class ToDo {
     dueDate;
     id;
     completed;
-    edited;
     constructor(description, dueDate) {
         this.description = description;
         this.dueDate = dueDate;
@@ -137,9 +139,6 @@ class ToDo {
     }
     setCompleted(completedStatus) {
         this.completed = completedStatus;
-    }
-    setEdited(edited) {
-        this.edited = edited;
     }
     generateID() {
         return this.currentID++;
@@ -240,9 +239,35 @@ function todosCreator() {
 
 }
 
+function editTodos() {
+
+    const displayEdit = (editElement) => {
+
+        if (editElement) {
+            const index = projectManager.currentProject.todos.findIndex(todo => todo.id === editElement);
+            if (index) {
+
+                const editForm = document.createElement('form');
+
+                editForm.innerHTML = `
+                <h2>Edit Todo:</h2>
+                <input type='text' class='edit-desc' value='${index.description}'>
+                <input type='date' class='edit-date' value='${index.dueDate}'>
+                <input type='checkbox' class='edit-check' value='${index.completed}'>
+                <button type='button' class='submit-edit'>Submit</button> 
+                `
+                editContainer.style.display = 'block';
+                editContainer.appendChild(editForm);
+            }
+        }
+    }
+
+    return { displayEdit }
+}
 
 const creator = projectCreator();
 const toDoCreator = todosCreator();
+const edit = editTodos();
 
 // Show inputs listeners
 showProjectsInput.addEventListener('click', () => showAddForm(projectForm));
@@ -287,6 +312,9 @@ toDosContainer.addEventListener('click', (e) => {
         todoElement.remove(); // Clear HTML el from DOM
     }
 });
+
+
+
 
 const projectManager = new ProjectManager();
 const newProject = new Project();
