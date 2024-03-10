@@ -106,12 +106,13 @@ class Project {
     }
     deleteTodoById(todoId) {
         // Find todo, or index of that todo
-        const index = projectManager.currentProject.todos.findIndex(todo => todo.id === todoId);
+        const element = projectManager.currentProject.todos[2];
+        const index = projectManager.currentProject.todos.findIndex(todo => todo.id === element);
         if (index !== -1) {
             projectManager.currentProject.todos.splice(index, 1); // Then if is not -1 delete it
             console.log("Todo deleted");
         } else {
-            console.log("Todo not found");
+            console.log("Todo not found", todoId);
         }
     }
 }
@@ -248,14 +249,17 @@ function editTodos() {
             if (index) {
 
                 const editForm = document.createElement('form');
-
+                const todo = projectManager.currentProject.todos[index];
+                console.log(index);
+                
                 editForm.innerHTML = `
-                <h2>Edit Todo:</h2>
-                <input type='text' class='edit-desc' value='${index.description}'>
-                <input type='date' class='edit-date' value='${index.dueDate}'>
-                <input type='checkbox' class='edit-check' value='${index.completed}'>
-                <button type='button' class='submit-edit'>Submit</button> 
-                `
+                 <h2>Edit Todo:</h2>
+                 <input type='text' class='edit-desc' value='${todo.description}'>
+                 <input type='date' class='edit-date' value='${todo.dueDate}'>
+                 <input type='checkbox' class='edit-check' value='${todo.completed}'>
+                 <button type='button' class='submit-edit'>Submit</button> 
+                 `
+
                 editContainer.style.display = 'block';
                 editContainer.appendChild(editForm);
             }
@@ -310,6 +314,9 @@ toDosContainer.addEventListener('click', (e) => {
         const todoElement = target.closest('.todo-name'); // Then find closest  parent with that class
         newProject.deleteTodoById(todoElement); // Then call function for deleting that element
         todoElement.remove(); // Clear HTML el from DOM
+    } else if (target.classList.contains('edit-todo')) {
+        const editElement = target.closest('.todo-name');
+        edit.displayEdit(editElement);
     }
 });
 
